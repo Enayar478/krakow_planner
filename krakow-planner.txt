@@ -1,0 +1,372 @@
+import React, { useState } from 'react';
+import { Map, Calendar, MapPin, Utensils, Beer, Heart, Coffee, Clock, Info, Navigation, Sun, Moon } from 'lucide-react';
+
+// Données complètes des 3 jours
+const DAILY_DATA = [
+  {
+    day: 1,
+    title: "Mercredi - Vieille Ville",
+    mainProgram: [
+      {
+        time: "11:30",
+        name: "Bar Mleczny Pod Temidą",
+        type: "food",
+        address: "ul. Grodzka 43",
+        description: "Milk bar authentique",
+        price: "€",
+        specialty: "Kotlet schabowy",
+        mustTry: ["Żurek", "Kotlet schabowy", "Pierogi"],
+        coordinates: [50.0578, 19.9374]
+      },
+      {
+        time: "13:30-16:30",
+        name: "Tour du Rynek + Basilique",
+        type: "sight",
+        description: "Plus grande place médiévale d'Europe + Retable de Veit Stoss",
+        highlights: ["Halle aux Draps", "Tour de l'Hôtel de Ville", "Retable gothique"],
+        coordinates: [50.0617, 19.9373]
+      },
+      {
+        time: "17:00",
+        name: "Café Noworolski",
+        type: "cafe",
+        description: "Pause café historique Art nouveau",
+        atmosphere: "Historique",
+        specialty: "Gâteaux traditionnels",
+        coordinates: [50.0619, 19.9377]
+      },
+      {
+        time: "19:30",
+        name: "Pod Baranem",
+        type: "food",
+        address: "ul. Gertrudy 21",
+        description: "Restaurant traditionnel polonais raffiné",
+        price: "€€",
+        specialty: "Żurek",
+        mustTry: ["Canard rôti", "Żurek", "Vins polonais"],
+        coordinates: [50.0557, 19.9397]
+      },
+      {
+        time: "22:00",
+        name: "Mercy Brown",
+        type: "bar",
+        address: "ul. Straszewskiego 28",
+        description: "Bar secret derrière une bibliothèque",
+        atmosphere: "Années 20, jazz live",
+        specialty: "Cocktails d'époque",
+        price: "€€",
+        secretTip: "Le mot de passe change chaque semaine, demander gentiment au bibliothécaire",
+        coordinates: [50.0589, 19.9334]
+      }
+    ],
+    secretSpots: {
+      bars: [
+        {
+          name: "Sababa",
+          address: "ul. Szeroka 2",
+          description: "Bar caché derrière un frigo",
+          type: "cocktail",
+          price: "€€",
+          atmosphere: "Mystérieux",
+          bestTime: "Soirée"
+        },
+        {
+          name: "Pauza In Garden",
+          address: "ul. Rajska 12",
+          description: "Rooftop caché avec vue",
+          type: "rooftop",
+          bestTime: "Coucher du soleil",
+          atmosphere: "Branché"
+        },
+        {
+          name: "Movida",
+          address: "ul. Miodowa 15",
+          description: "Bar à vins dans une cave médiévale",
+          type: "wine",
+          atmosphere: "Romantique",
+          specialty: "Vins d'Europe de l'Est"
+        }
+      ],
+      food: [
+        {
+          name: "Pierogarnia Krakowiacy",
+          address: "ul. Szewska 23",
+          description: "Meilleurs pierogis traditionnels",
+          price: "€",
+          specialty: "Pierogis variés"
+        },
+        {
+          name: "Café Camelot",
+          description: "Cave médiévale romantique",
+          atmosphere: "Vintage",
+          specialty: "Chocolat chaud maison"
+        }
+      ]
+    }
+  },
+  {
+    day: 2,
+    title: "Jeudi - Auschwitz + Kazimierz",
+    mainProgram: [
+      {
+        time: "10:45",
+        name: "Arrivée Auschwitz",
+        type: "visit",
+        description: "RDV 30 min avant la visite",
+        important: ["Pièce d'identité obligatoire", "Petit sac uniquement", "Bouteille d'eau"]
+      },
+      {
+        time: "11:15-15:30",
+        name: "Visite guidée",
+        type: "visit",
+        description: "Visite guidée en français"
+      },
+      {
+        time: "17:30",
+        name: "Retour Cracovie",
+        type: "transport"
+      },
+      {
+        time: "19:00",
+        name: "Klezmer Hois",
+        type: "food",
+        address: "ul. Szeroka 6",
+        description: "Restaurant juif traditionnel avec musique live",
+        atmosphere: "Authentique",
+        price: "€€",
+        specialty: "Cuisine juive traditionnelle"
+      },
+      {
+        time: "21:30",
+        name: "Alchemia",
+        type: "bar",
+        address: "ul. Estery 5",
+        description: "Bar mythique de Kazimierz",
+        atmosphere: "Alternative",
+        price: "€",
+        specialty: "Bières locales"
+      }
+    ],
+    secretSpots: {
+      bars: [
+        {
+          name: "Taawa",
+          address: "ul. Józefa 36",
+          description: "Rooftop vue sur synagogues",
+          type: "cocktail",
+          bestTime: "Coucher du soleil"
+        },
+        {
+          name: "Eszeweria",
+          address: "ul. Józefa 9",
+          description: "Déco bizarre de grand-mère",
+          atmosphere: "Vintage",
+          specialty: "Vodkas maison"
+        },
+        {
+          name: "Singer",
+          address: "ul. Estery 20",
+          description: "Tables avec machines à coudre",
+          atmosphere: "Unique",
+          specialty: "Bières locales"
+        },
+        {
+          name: "BeerGallery Dominikańska",
+          address: "ul. Dominikańska 3",
+          description: "Caves médiévales",
+          type: "beer",
+          specialty: "150+ bières artisanales"
+        }
+      ],
+      food: [
+        {
+          name: "Marchewka z Groszkiem",
+          address: "ul. Kupa 6",
+          description: "Cuisine polonaise authentique",
+          price: "€",
+          atmosphere: "Familial"
+        },
+        {
+          name: "Hamsa",
+          description: "Cuisine israélienne authentique",
+          specialty: "Hummus",
+          atmosphere: "Moderne",
+          price: "€€"
+        }
+      ]
+    }
+  },
+  {
+    day: 3,
+    title: "Vendredi - Wawel + Podgórze",
+    mainProgram: [
+      {
+        time: "09:00",
+        name: "Château Wawel",
+        type: "sight",
+        description: "Visite du château royal",
+        highlights: ["Cathédrale", "Chambres d'État", "Dragon"]
+      },
+      {
+        time: "12:00",
+        name: "Przystanek Pierogarnia",
+        type: "food",
+        description: "Meilleurs pierogis de Cracovie",
+        price: "€",
+        specialty: "Pierogis artisanaux"
+      },
+      {
+        time: "14:00-17:00",
+        name: "Podgórze + Schindler",
+        type: "visit",
+        description: "Quartier historique + usine de Schindler"
+      },
+      {
+        time: "19:30",
+        name: "Starka",
+        type: "food",
+        address: "ul. Józefa 14",
+        description: "Restaurant polonais raffiné",
+        price: "€€€",
+        specialty: "Vodkas artisanales maison",
+        atmosphere: "Romantique"
+      },
+      {
+        time: "22:00",
+        name: "BeerGallery + Taawa",
+        type: "bar",
+        description: "Bar à bières puis rooftop",
+        price: "€€"
+      }
+    ],
+    secretSpots: {
+      bars: [
+        {
+          name: "Forum Przestrzenie",
+          description: "Friche industrielle cool",
+          atmosphere: "Alternative",
+          specialty: "Vue sur la Vistule"
+        },
+        {
+          name: "Weźże Krafta",
+          description: "Bar dans un bunker",
+          type: "beer",
+          atmosphere: "Underground"
+        },
+        {
+          name: "Hevre",
+          address: "ul. Meiselsa 18",
+          description: "Ancienne synagogue",
+          atmosphere: "Historique",
+          type: "cocktail"
+        }
+      ],
+      food: [
+        {
+          name: "Zajezdnia",
+          address: "ul. św. Wawrzyńca 12",
+          description: "Restaurant local",
+          price: "€",
+          atmosphere: "Industriel"
+        },
+        {
+          name: "Stara Zajezdnia",
+          description: "Brasserie dans ancien dépôt",
+          specialty: "Bières maison",
+          atmosphere: "Industriel chic"
+        }
+      ]
+    }
+  }
+];
+
+const KrakowPlanner = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [selectedDay, setSelectedDay] = useState('all');
+  const [selectedType, setSelectedType] = useState('all');
+
+  const tabs = [
+    { id: 'overview', name: 'Aperçu', icon: <Map className="w-4 h-4" /> },
+    { id: 'daily', name: 'Jour par jour', icon: <Calendar className="w-4 h-4" /> },
+    { id: 'spots', name: 'Spots Secrets', icon: <MapPin className="w-4 h-4" /> },
+    { id: 'romantic', name: 'Romance', icon: <Heart className="w-4 h-4" /> },
+    { id: 'tips', name: 'Conseils', icon: <Info className="w-4 h-4" /> }
+  ];
+
+  const filters = [
+    { id: 'all', name: 'Tout voir', icon: <Map /> },
+    { id: 'food', name: 'Restaurants', icon: <Utensils /> },
+    { id: 'bars', name: 'Bars', icon: <Beer /> },
+    { id: 'coffee', name: 'Cafés', icon: <Coffee /> },
+    { id: 'romantic', name: 'Spots Romantiques', icon: <Heart /> }
+  ];
+
+  return (
+    <div className="max-w-6xl mx-auto p-4">
+      {/* Header avec titre stylé */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-6 mb-6 text-white">
+        <h1 className="text-3xl font-bold mb-2">Voyage à Cracovie</h1>
+        <p className="text-sm opacity-90">5-8 février 2025</p>
+      </div>
+
+      {/* Navigation principale */}
+      <div className="bg-white rounded-lg shadow-lg p-4 mb-6">
+        <div className="flex gap-2 overflow-x-auto pb-2">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
+                activeTab === tab.id 
+                  ? 'bg-blue-500 text-white' 
+                  : 'bg-gray-100 hover:bg-gray-200'
+              }`}
+            >
+              {React.cloneElement(tab.icon, { className: "w-4 h-4 mr-2" })}
+              {tab.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Filtres */}
+      <div className="flex flex-wrap gap-3 mb-6">
+        {[1, 2, 3].map(day => (
+          <button
+            key={day}
+            onClick={() => setSelectedDay(selectedDay === day ? 'all' : day)}
+            className={`px-4 py-2 rounded-full transition-colors ${
+              selectedDay === day ? 'bg-blue-500 text-white' : 'bg-gray-100'
+            }`}
+          >
+            <Calendar className="w-4 h-4 inline mr-2" />
+            Jour {day}
+          </button>
+        ))}
+        {filters.map(filter => (
+          <button
+            key={filter.id}
+            onClick={() => setSelectedType(selectedType === filter.id ? 'all' : filter.id)}
+            className={`px-4 py-2 rounded-full transition-colors ${
+              selectedType === filter.id ? 'bg-blue-500 text-white' : 'bg-gray-100'
+            }`}
+          >
+            {React.cloneElement(filter.icon, { className: "w-4 h-4 inline mr-2" })}
+            {filter.name}
+          </button>
+        ))}
+      </div>
+
+      {/* Contenu principal */}
+      <div className="bg-white rounded-lg shadow-lg">
+        {/* Le contenu sera ajouté ici progressivement */}
+        <div className="p-6 text-center text-gray-500">
+          <Map className="w-12 h-12 mx-auto mb-4 opacity-50" />
+          <p>Chargement de votre voyage romantique...</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default KrakowPlanner;
