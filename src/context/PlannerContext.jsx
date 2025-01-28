@@ -1,5 +1,6 @@
 // src/context/PlannerContext.jsx
-import { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { DAILY_DATA } from '../data/dailyData';
 
 const PlannerContext = createContext();
 
@@ -14,7 +15,8 @@ export const PlannerProvider = ({ children }) => {
     selectedDay,
     setSelectedDay,
     selectedType,
-    setSelectedType
+    setSelectedType,
+    dailyData: DAILY_DATA
   };
 
   return (

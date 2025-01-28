@@ -1,7 +1,79 @@
 /* src/styles/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;600;700&family=Inter:wght@400;500&family=DM+Serif+Display&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Styles de base */
+body {
+  @apply font-inter text-[#264653] bg-neutral-50;
+}
+
+/* Styles personnalisés pour les marqueurs de carte */
+.custom-marker {
+  @apply w-8 h-8 rounded-full flex items-center justify-center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  border: 2px solid white;
+  transition: transform 0.2s;
+}
+
+.custom-marker:hover {
+  transform: scale(1.1);
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+  @apply rounded-xl shadow-lg;
+  border: none;
+}
+
+.custom-popup .leaflet-popup-tip {
+  @apply bg-white;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.3s ease-out forwards;
+}
+
+/* Styles spécifiques pour mobile */
+body {
+  @apply bg-gray-50 text-gray-900 antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Empêcher le scroll bounce sur iOS */
+html {
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  overflow: auto;
+  height: 100%;
+  overscroll-behavior-y: none;
+}
+
+/* Cacher la barre de défilement sur mobile */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Styles pour les transitions fluides */
+.transition-smooth {
+  @apply transition-all duration-200 ease-in-out;
+}
 
 @layer base {
   html {
@@ -38,18 +110,167 @@
   }
 }
 
-/* Animations personnalisées */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Styles pour la carte Leaflet */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.3s ease-out forwards;
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+}
+
+/* Ajouter ces styles pour les marqueurs personnalisés */
+.custom-div-icon {
+  background: transparent;
+  border: none;
+}
+
+.marker-pin {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  position: relative;
+  transform: rotate(-45deg);
+  margin: -15px 0 0 -15px;
+}
+
+.marker-pin::after {
+  content: '';
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  position: absolute;
+  left: 3px;
+  top: 3px;
+}
+
+.marker-pin.food { background: #ef4444; }
+.marker-pin.bar { background: #f59e0b; }
+.marker-pin.cafe { background: #8b5cf6; }
+.marker-pin.sight { background: #3b82f6; }
+.marker-pin.hotel { background: #10b981; }
+.marker-pin.romantic { background: #ec4899; }
+
+/* Ajouter ces styles pour les nouveaux marqueurs */
+.custom-marker-container {
+  position: relative;
+}
+
+.custom-marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.custom-marker:hover {
+  transform: scale(1.1);
+}
+
+.marker-icon {
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  mask-size: cover;
+  -webkit-mask-size: cover;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Styles pour les popups */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+}
+
+.leaflet-container {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Ajouter ces styles */
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Styles pour l'animation du bouton */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.animate-pulse-slow {
+  animation: pulse 2s infinite;
+}
+
+/* Optimisations pour le texte sur fond d'image */
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Styles pour les marqueurs de carte */
+.leaflet-div-icon {
+  background: transparent;
+  border: none;
+}
+
+.custom-marker-container {
+  width: 32px;
+  height: 32px;
+}
+
+.custom-marker {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+}
+
+.custom-marker:hover {
+  transform: scale(1.1);
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+}
+
+/* Fix pour le z-index des popups */
+.leaflet-popup {
+  z-index: 1000;
+}
+
+.leaflet-container {
+  z-index: 1;
 }
