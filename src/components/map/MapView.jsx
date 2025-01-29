@@ -114,80 +114,84 @@ const MapView = () => {
   ];
 
   return (
-    <div className="fixed inset-0">
-      <MapContainer
-        center={center}
-        zoom={14}
-        className="h-full w-full"
-        scrollWheelZoom={true}
-      >
-        <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://carto.com">CARTO</a>'
-        />
-        
-        {/* Marqueurs avec vérification des coordonnées */}
-        {filteredSpots.map((spot, index) => {
-          if (!spot.coordinates || !Array.isArray(spot.coordinates)) return null;
-          
-          return (
-            <Marker
-              key={`${spot.name}-${index}`}
-              position={spot.coordinates}
-              icon={icons[spot.category] || icons.sight}
-            >
-              <Popup className="custom-popup">
-                <div className="p-3">
-                  <h3 className="font-karla text-lg font-bold text-accent-navy">
-                    {spot.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-1">{spot.description}</p>
-                  {spot.address && (
-                    <p className="text-sm text-gray-500 mt-2">📍 {spot.address}</p>
-                  )}
-                  {spot.specialty && (
-                    <p className="text-sm text-primary mt-1">✨ {spot.specialty}</p>
-                  )}
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
-
-        {/* Bouton filtres */}
-        <div className="absolute right-4 top-4 z-[1000]">
-          <button
-            onClick={() => setIsFiltersOpen(!isFiltersOpen)}
-            className="bg-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center"
-          >
-            {isFiltersOpen ? (
-              <X className="w-6 h-6 text-gray-700" />
-            ) : (
-              <Filter className="w-6 h-6 text-gray-700" />
-            )}
-          </button>
-
-          {/* Menu des filtres */}
-          {isFiltersOpen && (
-            <div className="absolute top-16 right-0 bg-white rounded-2xl shadow-lg p-4 w-48">
-              {filters.map(filter => (
-                <button
-                  key={filter.id}
-                  onClick={() => setActiveFilter(filter.id)}
-                  className={`w-full flex items-center space-x-3 px-4 py-2 rounded-xl ${
-                    activeFilter === filter.id 
-                      ? 'bg-primary/10 text-primary'
-                      : 'hover:bg-gray-50'
-                  }`}
-                >
-                  <span>{filter.icon}</span>
-                  <span>{filter.name}</span>
-                </button>
-              ))}
-            </div>
+    <div className="absolute inset-0">
+      {/* Bouton filtres */}
+      <div className="absolute right-4 top-4 z-[1000]">
+        <button
+          onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+          className="bg-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center"
+        >
+          {isFiltersOpen ? (
+            <X className="w-6 h-6 text-gray-700" />
+          ) : (
+            <Filter className="w-6 h-6 text-gray-700" />
           )}
-        </div>
-      </MapContainer>
+        </button>
+
+        {/* Menu des filtres */}
+        {isFiltersOpen && (
+          <div className="absolute top-16 right-0 bg-white rounded-2xl shadow-lg p-4 w-48">
+            {filters.map(filter => (
+              <button
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id)}
+                className={`w-full flex items-center space-x-3 px-4 py-2 rounded-xl ${
+                  activeFilter === filter.id 
+                    ? 'bg-primary/10 text-primary'
+                    : 'hover:bg-gray-50'
+                }`}
+              >
+                <span>{filter.icon}</span>
+                <span>{filter.name}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Carte */}
+      <div className="h-full">
+        <MapContainer
+          center={center}
+          zoom={14}
+          className="h-full w-full"
+          scrollWheelZoom={true}
+          zoomControl={false}
+        >
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://carto.com">CARTO</a>'
+          />
+          
+          {/* Marqueurs */}
+          {filteredSpots.map((spot, index) => {
+            if (!spot.coordinates || !Array.isArray(spot.coordinates)) return null;
+            
+            return (
+              <Marker
+                key={`${spot.name}-${index}`}
+                position={spot.coordinates}
+                icon={icons[spot.category] || icons.sight}
+              >
+                <Popup className="custom-popup">
+                  <div className="p-3">
+                    <h3 className="font-karla text-lg font-bold text-accent-navy">
+                      {spot.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 mt-1">{spot.description}</p>
+                    {spot.address && (
+                      <p className="text-sm text-gray-500 mt-2">📍 {spot.address}</p>
+                    )}
+                    {spot.specialty && (
+                      <p className="text-sm text-primary mt-1">✨ {spot.specialty}</p>
+                    )}
+                  </div>
+                </Popup>
+              </Marker>
+            );
+          })}
+        </MapContainer>
+      </div>
     </div>
   );
 };

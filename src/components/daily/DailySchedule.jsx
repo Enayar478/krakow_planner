@@ -1,4 +1,4 @@
-// src/components/daily/DailySchedule.jsx
+  // src/components/daily/DailySchedule.jsx
 import React from 'react';
 import { useKrakowPlanner } from '../../context/PlannerContext';
 import { Clock, MapPin } from 'lucide-react';

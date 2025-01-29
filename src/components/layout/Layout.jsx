@@ -10,15 +10,14 @@ import Overview from '../overview/Overview';
 import MapView from '../map/MapView';
 
 const Layout = () => {
-  const { activeTab, setActiveTab, selectedDay, setSelectedDay, selectedType, setSelectedType, isFiltersOpen, setIsFiltersOpen } = useKrakowPlanner();
+  const { activeTab, setActiveTab } = useKrakowPlanner();
 
   const tabs = [
     { id: 'overview', name: 'Aperçu', icon: <Map className="w-5 h-5" /> },
     { id: 'daily', name: 'Planning', icon: <Calendar className="w-5 h-5" /> },
     { id: 'spots', name: 'Spots', icon: <MapPin className="w-5 h-5" /> },
     { id: 'romantic', name: 'Romance', icon: <Heart className="w-5 h-5" /> },
-    { id: 'tips', name: 'Conseils', icon: <Info className="w-5 h-5" /> },
-    { id: 'map', name: 'Carte', icon: <Map className="w-5 h-5" /> }
+    { id: 'tips', name: 'Conseils', icon: <Info className="w-5 h-5" /> }
   ];
 
   const filters = [
@@ -49,50 +48,71 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      {/* Header conditionnel - caché sur la page d'accueil */}
+    <div className="h-screen flex flex-col">
+      {/* Header - visible sur toutes les pages sauf Overview */}
       {activeTab !== 'overview' && (
-        <header className="bg-[#264653] text-white py-4 px-4">
-          <div className="max-w-6xl mx-auto">
-            <h1 className="font-karla text-2xl font-bold">Voyage à Cracovie</h1>
-            <p className="font-inter text-sm opacity-80">5-8 février 2025</p>
+        <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-neutral-200 z-50">
+          <div className="max-w-screen-xl mx-auto px-4 h-full flex items-center">
+            <div className="flex items-center gap-3">
+              <Map className="w-8 h-8" />
+              <div>
+                <h1 className="text-3xl font-bold mb-2">Voyage à Cracovie</h1>
+                <p className="text-sm opacity-90">5-8 février 2025</p>
+              </div>
+            </div>
           </div>
         </header>
       )}
 
-      {/* Contenu principal avec padding ajusté */}
-      <main className={`${
-        activeTab === 'overview' ? 'p-0' : 'pb-24 pt-4 px-4'
-      }`}>
-        {renderContent()}
+      {/* Zone de contenu principale */}
+      <main className={`flex-1 ${activeTab !== 'overview' ? 'mt-16 mb-16' : ''} relative`}>
+        {activeTab === 'overview' && <Overview />}
+        {activeTab === 'map' && <MapView />}
+        {activeTab === 'daily' && (
+          <div className="h-full overflow-y-auto">
+            <DailySchedule />
+          </div>
+        )}
+        {activeTab === 'spots' && (
+          <div className="h-full overflow-y-auto">
+            <SecretSpots />
+          </div>
+        )}
+        {activeTab === 'romantic' && (
+          <div className="h-full overflow-y-auto">
+            <RomanticSpots />
+          </div>
+        )}
+        {activeTab === 'tips' && (
+          <div className="h-full overflow-y-auto">
+            <PracticalTips />
+          </div>
+        )}
       </main>
 
-      {/* Navigation bottom avec nouveau style */}
-      <nav className={`fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 ${
-        activeTab === 'overview' || activeTab === 'map' ? 'hidden' : ''
-      }`}>
-        <div className="max-w-6xl mx-auto flex justify-around">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex flex-col items-center py-3 px-4 relative ${
-                activeTab === tab.id 
-                  ? 'text-[#2A9D8F]' 
-                  : 'text-neutral-400'
-              }`}
-            >
-              {activeTab === tab.id && (
-                <span className="absolute top-0 left-0 right-0 h-0.5 bg-[#2A9D8F]" />
-              )}
-              {React.cloneElement(tab.icon, { 
-                className: `w-6 h-6 ${activeTab === tab.id ? 'stroke-[#2A9D8F]' : 'stroke-current'}` 
-              })}
-              <span className="text-xs mt-1 font-inter">{tab.name}</span>
-            </button>
-          ))}
-        </div>
-      </nav>
+      {/* Navigation - visible sur toutes les pages sauf Overview */}
+      {activeTab !== 'overview' && (
+        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-200 h-16 z-50">
+          <div className="max-w-screen-xl mx-auto px-4">
+            <div className="flex justify-around h-full items-center">
+              {tabs.map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex flex-col items-center px-3 relative ${
+                    activeTab === tab.id ? 'text-primary' : 'text-gray-500'
+                  }`}
+                >
+                  {React.cloneElement(tab.icon, { 
+                    className: `w-6 h-6 ${activeTab === tab.id ? 'stroke-primary' : 'stroke-current'}` 
+                  })}
+                  <span className="text-xs mt-1 font-inter">{tab.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </nav>
+      )}
     </div>
   );
 };
